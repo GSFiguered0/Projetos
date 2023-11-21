@@ -271,10 +271,40 @@ function cadastrarDespesas() {
 function carregarDespesas() {
 
     let despesa = gravador.carregarDados();
-    console.log(despesa)
-
     mostraElemento('consultar', despesa);
 }
+
+function somarDespesas(despesa, tipo) {
+
+    let cpfLogado = localStorage.getItem('cpfLogado')
+    let somaValores = 0;
+
+    if (tipo == 'consultar') {
+        despesa.forEach(
+            (v) => {
+                if (v.registro == 'despesa' && v.cpfLogado == cpfLogado) {
+                    somaValores += Number(v.valor);
+                }
+            }
+        )
+
+        document.getElementById('somaDespesas').innerHTML = `R$${somaValores}`
+    }
+
+    if (tipo == 'filtrar') {
+        document.getElementById('tituloSomaD').innerHTML = `Soma das despesas filtradas`
+        despesa.forEach(
+            (v) => {
+                if (v.registro == 'despesa' && v.cpfLogado == cpfLogado) {
+                    somaValores += Number(v.valor);
+                }
+            }
+        )
+
+        document.getElementById('somaDespesas').innerHTML = `R$${somaValores}`
+    }
+}
+
 
 function mostraElemento(tipo, despesaF) {
 
@@ -312,24 +342,15 @@ function mostraElemento(tipo, despesaF) {
                 } else {
 
                 }
-
-                if (v.registro == 'despesa' && v.cpfLogado == cpfLogado) {
-                    let x;
-                    x += v.valor; 
-
-                    let somaDespesas = x;
-
-                    localStorage.setItem(cpfLogado, JSON.stringify(somaDespesas));
-                    console.log(somaDespesas) 
-
-                    despesaSoma.innerHTML = `${somaDespesas}`
-                }
             }
         )
+
+        somarDespesas(despesa, 'consultar')
     }
 
     if (tipo == 'filtrar') {
 
+        let despesaFiltrada = Array();
         document.getElementById('listaDespesas').innerHTML = '';
 
         despesa.forEach(
@@ -355,11 +376,14 @@ function mostraElemento(tipo, despesaF) {
                         gravador.removerDados(botao.id)
                     };
 
+                    despesaFiltrada.push(v);
                 } else {
 
                 }
             }
         )
+
+        somarDespesas(despesaFiltrada, 'filtrar')
     }
 }
 
