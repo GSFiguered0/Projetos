@@ -408,5 +408,3 @@ function buscarDados() {
         gravador.pesquisarDados(obj);
     }
 }
-
-//----------------------------------- Soma das despesas ----------------------- //
